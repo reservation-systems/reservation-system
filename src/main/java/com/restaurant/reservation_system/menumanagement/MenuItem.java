@@ -1,7 +1,7 @@
 package com.restaurant.reservation_system.menumanagement;
 
-public class MenuItem {
+//library use to connect java classes with database tables
+import jakarta.persistence.*;
 
-    public String test09;
-    public String test10;
+public class MenuItem {
 }
