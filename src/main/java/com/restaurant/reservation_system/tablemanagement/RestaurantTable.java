@@ -2,5 +2,5 @@ package com.restaurant.reservation_system.tablemanagement;
 
 public class RestaurantTable {
 
-    public String test01 ;
+    public String test018 ;
 }
