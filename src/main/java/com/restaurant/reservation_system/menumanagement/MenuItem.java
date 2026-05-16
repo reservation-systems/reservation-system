@@ -3,5 +3,5 @@ package com.restaurant.reservation_system.menumanagement;
 public class MenuItem {
 
     String test002;
-    String test0003;
+    String test003;
 }
