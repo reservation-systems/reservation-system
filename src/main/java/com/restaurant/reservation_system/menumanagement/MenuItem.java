@@ -4,4 +4,5 @@ public class MenuItem {
 
     String test002;
     String test003;
+    String test004;
 }
