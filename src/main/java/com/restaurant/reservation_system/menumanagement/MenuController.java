@@ -4,6 +4,11 @@ package com.restaurant.reservation_system.menumanagement;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/*Marks the class as a web controller (handle web request automatically
+converts the returned data into JSON)*/
+@RestController
+@RequestMapping("/api/menu")
+@CrossOrigin("*")
 public class MenuController {
 
 }
