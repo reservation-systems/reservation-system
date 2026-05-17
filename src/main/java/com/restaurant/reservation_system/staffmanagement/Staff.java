@@ -4,8 +4,13 @@ import jakarta.persistence.*;
 
 @Entity
 public class Staff {
+
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
      private String name;
      private String role; // e.g., Chef, Waiter, Manager
      private String phone;
      private String email;
      private double salary;
+}
