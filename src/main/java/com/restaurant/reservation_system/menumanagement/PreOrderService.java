@@ -13,4 +13,7 @@ public class PreOrderService {
         this.menuItemRepository = menuItemRepository;
     }
 
+    public List<PreOrder> getAllPreOrders() {
+        return preOrderRepository.findAll();
+    }
 }
