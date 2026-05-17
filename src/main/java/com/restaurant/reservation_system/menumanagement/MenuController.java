@@ -17,4 +17,14 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    @GetMapping
+    public List<MenuItem> getAllMenuItems() {
+        return menuService.getAllMenuItems();
+    }
+
+    @GetMapping("/available")
+    public List<MenuItem> getAvailableMenuItems() {
+        return menuService.getAvailableMenuItems();
+    }
+
 }
