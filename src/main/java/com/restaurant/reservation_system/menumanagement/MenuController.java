@@ -11,5 +11,6 @@ converts the returned data into JSON)*/
 @CrossOrigin("*")
 public class MenuController {
 
+    public String test1;
 
 }
