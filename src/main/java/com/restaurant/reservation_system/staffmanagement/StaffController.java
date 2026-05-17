@@ -7,5 +7,10 @@ import java.util.List;
 @RequestMapping("/api/staff")
 @CrossOrigin("*")
 public class StaffController {
+    private final StaffService staffService;
+
+    public StaffController(StaffService staffService) {
+        this.staffService = staffService;
+    }
 
 }
