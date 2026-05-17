@@ -29,4 +29,10 @@ public class StaffController {
         return staffService.updateStaff(id, staff);
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteStaff(@PathVariable Long id) {
+        staffService.deleteStaff(id);
+        return "Staff deleted successfully";
+    }
+
 }
