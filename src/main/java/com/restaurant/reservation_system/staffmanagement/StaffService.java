@@ -7,6 +7,12 @@ import java.util.List;
 public class StaffService {
     private final StaffRepository staffRepository;
 
+    public StaffService(StaffRepository staffRepository) {
+        this.staffRepository = staffRepository;
+    }
+
+
+
 
 
 
