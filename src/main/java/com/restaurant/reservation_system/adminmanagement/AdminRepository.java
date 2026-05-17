@@ -1,4 +1,6 @@
 package com.restaurant.reservation_system.adminmanagement;
 
-public interface AdminRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 }
