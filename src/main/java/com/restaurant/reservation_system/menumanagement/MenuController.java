@@ -27,4 +27,14 @@ public class MenuController {
         return menuService.getAvailableMenuItems();
     }
 
+    @PostMapping
+    public MenuItem addMenuItem(@RequestBody MenuItem menuItem) {
+        return menuService.addMenuItem(menuItem);
+    }
+
+    @PutMapping("/{id}")
+    public MenuItem updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
+        return menuService.updateMenuItem(id, menuItem);
+    }
+
 }
