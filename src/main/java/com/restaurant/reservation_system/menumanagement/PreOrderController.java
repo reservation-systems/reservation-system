@@ -29,4 +29,11 @@ public class PreOrderController {
         return preOrderService.updateStatus(id, status);
     }
 
+    @DeleteMapping("/{id}")
+    public String deletePreOrder(@PathVariable Long id) {
+        preOrderService.deletePreOrder(id);
+        return "Pre-order deleted successfully";
+    }
+
+
 }
