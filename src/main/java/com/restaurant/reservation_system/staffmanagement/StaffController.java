@@ -18,4 +18,9 @@ public class StaffController {
         return staffService.getAllStaff();
     }
 
+    @PostMapping
+    public Staff addStaff(@RequestBody Staff staff) {
+        return staffService.addStaff(staff);
+    }
+
 }
