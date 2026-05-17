@@ -16,4 +16,20 @@ public class PreOrderService {
     public List<PreOrder> getAllPreOrders() {
         return preOrderRepository.findAll();
     }
+
+    public PreOrder createPreOrder(Long menuItemId, PreOrder preOrder) {
+        MenuItem menuItem = menuItemRepository.findById(menuItemId)
+                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+
+        if (!menuItem.isAvailable()) {
+            throw new RuntimeException("Menu item is not available");
+        }
+
+        preOrder.setMenuItem(menuItem);
+        preOrder.setItemName(menuItem.getName());
+        preOrder.setTotalPrice(menuItem.getPrice() * preOrder.getQuantity());
+        preOrder.setStatus("PENDING");
+
+        return preOrderRepository.save(preOrder);
+    }
 }
