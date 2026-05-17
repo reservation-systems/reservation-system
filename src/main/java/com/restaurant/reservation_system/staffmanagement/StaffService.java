@@ -1,0 +1,8 @@
+package com.restaurant.reservation_system.staffmanagement;
+
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class StaffService {
+}
