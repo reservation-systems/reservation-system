@@ -13,4 +13,9 @@ public class PreOrderController {
     public PreOrderController(PreOrderService preOrderService) {
         this.preOrderService = preOrderService;
     }
+
+    @GetMapping
+    public List<PreOrder> getAllPreOrders() {
+        return preOrderService.getAllPreOrders();
+    }
 }
