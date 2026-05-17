@@ -6,6 +6,7 @@ public class Staff {
      private String phone;
      private String email;
      private double salary;
+     private Long id;
 
 
 
