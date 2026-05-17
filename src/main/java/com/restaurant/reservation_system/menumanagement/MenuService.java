@@ -26,4 +26,17 @@ public class MenuService {
     public void deleteMenuItem(Long id) {
         menuItemRepository.deleteById(id);
     }
+
+    public MenuItem updateMenuItem(Long id, MenuItem updatedItem) {
+        MenuItem item = menuItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+
+        item.setName(updatedItem.getName());
+        item.setCategory(updatedItem.getCategory());
+        item.setPrice(updatedItem.getPrice());
+        item.setDescription(updatedItem.getDescription());
+        item.setAvailable(updatedItem.isAvailable());
+
+        return menuItemRepository.save(item);
+    }
 }
