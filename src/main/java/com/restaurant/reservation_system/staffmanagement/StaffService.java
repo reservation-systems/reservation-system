@@ -15,6 +15,12 @@ public class StaffService {
         return staffRepository.findAll();
     }
 
+    public Staff addStaff(Staff staff) {
+        return staffRepository.save(staff);
+    }
+
+
+
 
 
 
