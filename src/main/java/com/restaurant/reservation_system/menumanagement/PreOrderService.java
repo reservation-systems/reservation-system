@@ -32,4 +32,19 @@ public class PreOrderService {
 
         return preOrderRepository.save(preOrder);
     }
+
+
+    public PreOrder updateStatus(Long id, String status) {
+        PreOrder preOrder = preOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pre-order not found"));
+
+        preOrder.setStatus(status);
+        return preOrderRepository.save(preOrder);
+    }
+
+    public void deletePreOrder(Long id) {
+        preOrderRepository.deleteById(id);
+    }
+
+
 }
