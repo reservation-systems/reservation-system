@@ -5,6 +5,7 @@ public class Staff {
      private String role; // e.g., Chef, Waiter, Manager
      private String phone;
      private String email;
+     private double salary;
 
 
 
