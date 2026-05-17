@@ -23,4 +23,10 @@ public class StaffController {
         return staffService.addStaff(staff);
     }
 
+    @PutMapping("/{id}")
+    public Staff updateStaff(@PathVariable Long id,
+                             @RequestBody Staff staff) {
+        return staffService.updateStaff(id, staff);
+    }
+
 }
