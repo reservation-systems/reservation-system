@@ -7,7 +7,6 @@ import java.util.List;
 @RequestMapping("/api/preorders")
 @CrossOrigin("*")
 
-//feat(preorder): set up PreOrderController base structure and dependency injection
 public class PreOrderController {
     private final PreOrderService preOrderService;
 
