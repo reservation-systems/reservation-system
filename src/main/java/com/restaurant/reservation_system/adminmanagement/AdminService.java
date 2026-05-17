@@ -14,4 +14,16 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
+
+    public Admin saveAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
+
+    public void deleteAdmin(Long id) {
+        adminRepository.deleteById(id);
+    }
+
+
+
 }
+
