@@ -19,6 +19,19 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
+    public Staff updateStaff(Long id, Staff updatedStaff) {
+        Staff staff = staffRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+
+        staff.setName(updatedStaff.getName());
+        staff.setRole(updatedStaff.getRole());
+        staff.setPhone(updatedStaff.getPhone());
+        staff.setEmail(updatedStaff.getEmail());
+        staff.setSalary(updatedStaff.getSalary());
+
+        return staffRepository.save(staff);
+    }
+
 
 
 
