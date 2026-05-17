@@ -9,9 +9,6 @@ converts the returned data into JSON)*/
 @RestController
 @RequestMapping("/api/menu")
 @CrossOrigin("*")
+
 public class MenuController {
-
-    public String test1;
-    public String test2;
-
 }
