@@ -12,5 +12,6 @@ converts the returned data into JSON)*/
 public class MenuController {
 
     public String test1;
+    public String test2;
 
 }
