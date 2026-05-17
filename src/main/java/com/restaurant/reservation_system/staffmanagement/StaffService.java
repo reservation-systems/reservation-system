@@ -11,6 +11,11 @@ public class StaffService {
         this.staffRepository = staffRepository;
     }
 
+    public List<Staff> getAllStaff() {
+        return staffRepository.findAll();
+    }
+
+
 
 
 
