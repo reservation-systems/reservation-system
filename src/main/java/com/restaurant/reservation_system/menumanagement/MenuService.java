@@ -19,4 +19,11 @@ public class MenuService {
         return menuItemRepository.findByAvailableTrue();
     }
 
+    public MenuItem addMenuItem(MenuItem menuItem) {
+        return menuItemRepository.save(menuItem);
+    }
+
+    public void deleteMenuItem(Long id) {
+        menuItemRepository.deleteById(id);
+    }
 }
