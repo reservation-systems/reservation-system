@@ -24,4 +24,9 @@ public class PreOrderController {
         return preOrderService.createPreOrder(menuItemId, preOrder);
     }
 
+    @PutMapping("/{id}/status")
+    public PreOrder updateStatus(@PathVariable Long id, @RequestParam String status) {
+        return preOrderService.updateStatus(id, status);
+    }
+
 }
