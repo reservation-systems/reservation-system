@@ -3,6 +3,7 @@ package com.restaurant.reservation_system.menumanagement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
+
 //Repository interface for MenuItem entity
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
