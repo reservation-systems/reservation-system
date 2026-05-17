@@ -18,4 +18,10 @@ public class PreOrderController {
     public List<PreOrder> getAllPreOrders() {
         return preOrderService.getAllPreOrders();
     }
+
+    @PostMapping("/{menuItemId}")
+    public PreOrder createPreOrder(@PathVariable Long menuItemId, @RequestBody PreOrder preOrder) {
+        return preOrderService.createPreOrder(menuItemId, preOrder);
+    }
+
 }
