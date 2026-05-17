@@ -10,4 +10,13 @@ public class MenuService {
     public MenuService(MenuItemRepository menuItemRepository) {
         this.menuItemRepository = menuItemRepository;
     }
+
+    public List<MenuItem> getAllMenuItems() {
+        return menuItemRepository.findAll();
+    }
+
+    public List<MenuItem> getAvailableMenuItems() {
+        return menuItemRepository.findByAvailableTrue();
+    }
+
 }
