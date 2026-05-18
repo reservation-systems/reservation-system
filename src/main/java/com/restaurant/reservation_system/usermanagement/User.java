@@ -1,7 +1,17 @@
 package com.restaurant.reservation_system.usermanagement;
 
+import jakarta.persistence.*;
+
+@MappedSuperclass
 public class User {
 
-    public String test4545;
-    public String test02;
+    private String name;
+    private String email;
+    private String password;
+    private String phone;
+
+
+
+
+
 }
