@@ -22,4 +22,22 @@ public class Review {
     public void onCreate() {
         reviewDate = LocalDateTime.now();
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+
+    public LocalDateTime getReviewDate() { return reviewDate; }
+    public void setReviewDate(LocalDateTime reviewDate) { this.reviewDate = reviewDate; }
 }
