@@ -1,11 +1,8 @@
 package com.restaurant.reservation_system.reservationmanagement;
 
-
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 
 @Entity
 public class Reservation {
@@ -22,6 +19,7 @@ public class Reservation {
     private LocalTime reservationTime;
 
     private int numberOfGuests;
+
     private Integer tableNumber;
 
     private String specialRequest;
@@ -29,28 +27,61 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status = ReservationStatus.PENDING;
 
-    // Getters & Setters
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public String getCustomerName() {
+        return customerName;
+    }
 
-    public String getCustomerEmail() { return customerEmail; }
-    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
-    public String getCustomerPhone() { return customerPhone; }
-    public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
 
-    public LocalDate getReservationDate() { return reservationDate; }
-    public void setReservationDate(LocalDate reservationDate) { this.reservationDate = reservationDate; }
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
 
-    public LocalTime getReservationTime() { return reservationTime; }
-    public void setReservationTime(LocalTime reservationTime) { this.reservationTime = reservationTime; }
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
 
-    public int getNumberOfGuests() { return numberOfGuests; }
-    public void setNumberOfGuests(int numberOfGuests) { this.numberOfGuests = numberOfGuests; }
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    public LocalDate getReservationDate() {
+        return reservationDate;
+    }
+
+    public void setReservationDate(LocalDate reservationDate) {
+        this.reservationDate = reservationDate;
+    }
+
+    public LocalTime getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(LocalTime reservationTime) {
+        this.reservationTime = reservationTime;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
+    public void setNumberOfGuests(int numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
 
     public Integer getTableNumber() {
         return tableNumber;
@@ -68,7 +99,11 @@ public class Reservation {
         this.specialRequest = specialRequest;
     }
 
-    public ReservationStatus getStatus() { return status; }
-    public void setStatus(ReservationStatus status) { this.status = status; }
-}
+    public ReservationStatus getStatus() {
+        return status;
+    }
 
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
+    }
+}

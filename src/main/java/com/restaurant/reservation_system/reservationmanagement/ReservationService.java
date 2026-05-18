@@ -13,8 +13,10 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final RestaurantTableRepository tableRepository;
 
-    public ReservationService(ReservationRepository reservationRepository,
-                              RestaurantTableRepository tableRepository) {
+    public ReservationService(
+            ReservationRepository reservationRepository,
+            RestaurantTableRepository tableRepository
+    ) {
         this.reservationRepository = reservationRepository;
         this.tableRepository = tableRepository;
     }
@@ -28,13 +30,13 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.PENDING);
 
         if (reservation.getTableNumber() != null) {
-            RestaurantTable table = tableRepository.findAll()
-                    .stream()
-                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Table not found"));
 
-            if (table.getStatus() == TableStatus.RESERVED) {
+            RestaurantTable table = tableRepository
+                    .findByTableNumber(reservation.getTableNumber())
+                    .orElseThrow(() ->
+                            new RuntimeException("Table not found"));
+
+            if (table.getStatus() != TableStatus.AVAILABLE) {
                 throw new RuntimeException("Table already reserved");
             }
 
@@ -48,19 +50,21 @@ public class ReservationService {
     public Reservation updateStatus(Long id, ReservationStatus status) {
 
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("Reservation not found"));
 
         reservation.setStatus(status);
 
-        if (status == ReservationStatus.CANCELLED && reservation.getTableNumber() != null) {
-            RestaurantTable table = tableRepository.findAll()
-                    .stream()
-                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Table not found"));
+        if (status == ReservationStatus.CANCELLED
+                && reservation.getTableNumber() != null) {
 
-            table.setStatus(TableStatus.AVAILABLE);
-            tableRepository.save(table);
+            tableRepository
+                    .findByTableNumber(reservation.getTableNumber())
+                    .ifPresent(table -> {
+
+                        table.setStatus(TableStatus.AVAILABLE);
+                        tableRepository.save(table);
+                    });
         }
 
         return reservationRepository.save(reservation);
@@ -73,19 +77,20 @@ public class ReservationService {
     public void deleteReservation(Long id) {
 
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("Reservation not found"));
 
         if (reservation.getTableNumber() != null) {
-            RestaurantTable table = tableRepository.findAll()
-                    .stream()
-                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Table not found"));
 
-            table.setStatus(TableStatus.AVAILABLE);
-            tableRepository.save(table);
+            tableRepository
+                    .findByTableNumber(reservation.getTableNumber())
+                    .ifPresent(table -> {
+
+                        table.setStatus(TableStatus.AVAILABLE);
+                        tableRepository.save(table);
+                    });
         }
 
-        reservationRepository.deleteById(id);
+        reservationRepository.delete(reservation);
     }
 }
