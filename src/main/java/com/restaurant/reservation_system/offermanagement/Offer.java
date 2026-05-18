@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "offers")
 public class Offer {
 
     @Id
@@ -11,30 +12,89 @@ public class Offer {
     private Long id;
 
     private String title;
+
+    @Column(name = "offer_code")
+    private String offerCode;
+
     private String description;
+
     private double discountPercentage;
+
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private boolean active = true;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // =========================
+    // GETTERS
+    // =========================
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTitle() {
+        return title;
+    }
 
-    public double getDiscountPercentage() { return discountPercentage; }
-    public void setDiscountPercentage(double discountPercentage) { this.discountPercentage = discountPercentage; }
+    public String getOfferCode() {
+        return offerCode;
+    }
 
-    public LocalDate getStartDate() { return startDate; }
-    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+    public String getDescription() {
+        return description;
+    }
 
-    public LocalDate getEndDate() { return endDate; }
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public double getDiscountPercentage() {
+        return discountPercentage;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    // =========================
+    // SETTERS
+    // =========================
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOfferCode(String offerCode) {
+        this.offerCode = offerCode;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
