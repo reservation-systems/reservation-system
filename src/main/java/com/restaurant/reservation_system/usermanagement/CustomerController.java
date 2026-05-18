@@ -31,6 +31,10 @@ public class CustomerController {
 
         return ResponseEntity.ok(customer);
     }
+    @PostMapping
+    public Customer registerCustomer(@RequestBody Customer customer) {
+        return customerService.registerCustomer(customer);
+    }
 
 
 }
