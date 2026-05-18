@@ -1,45 +1,91 @@
 package com.restaurant.reservation_system.reservationmanagement;
 
+import com.restaurant.reservation_system.tablemanagement.RestaurantTable;
+import com.restaurant.reservation_system.tablemanagement.RestaurantTableRepository;
+import com.restaurant.reservation_system.tablemanagement.TableStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final RestaurantTableRepository tableRepository;
 
-    // Constructor Injection to link with the Database Repository
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository,
+                              RestaurantTableRepository tableRepository) {
         this.reservationRepository = reservationRepository;
+        this.tableRepository = tableRepository;
     }
 
-    // Business Logic: Get all records
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
 
-    // Business Logic: Find records matching a specific email
-    public List<Reservation> getReservationsByEmail(String email) {
-        return reservationRepository.findByCustomerEmail(email);
-    }
-    // Business Logic: Save a new reservation and force its initial status to PENDING
     public Reservation createReservation(Reservation reservation) {
+
         reservation.setStatus(ReservationStatus.PENDING);
+
+        if (reservation.getTableNumber() != null) {
+            RestaurantTable table = tableRepository.findAll()
+                    .stream()
+                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Table not found"));
+
+            if (table.getStatus() == TableStatus.RESERVED) {
+                throw new RuntimeException("Table already reserved");
+            }
+
+            table.setStatus(TableStatus.RESERVED);
+            tableRepository.save(table);
+        }
+
         return reservationRepository.save(reservation);
     }
 
-    // Business Logic: Find an existing reservation, change its status, or throw an error if missing
     public Reservation updateStatus(Long id, ReservationStatus status) {
+
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reservation not found"));
 
         reservation.setStatus(status);
+
+        if (status == ReservationStatus.CANCELLED && reservation.getTableNumber() != null) {
+            RestaurantTable table = tableRepository.findAll()
+                    .stream()
+                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Table not found"));
+
+            table.setStatus(TableStatus.AVAILABLE);
+            tableRepository.save(table);
+        }
+
         return reservationRepository.save(reservation);
     }
 
-    // Business Logic: Delete a record by its unique ID
-    public void deleteReservation(Long id) {
-        reservationRepository.deleteById(id);
+    public List<Reservation> getReservationsByEmail(String email) {
+        return reservationRepository.findByCustomerEmail(email);
     }
 
+    public void deleteReservation(Long id) {
+
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        if (reservation.getTableNumber() != null) {
+            RestaurantTable table = tableRepository.findAll()
+                    .stream()
+                    .filter(t -> t.getTableNumber() == reservation.getTableNumber())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Table not found"));
+
+            table.setStatus(TableStatus.AVAILABLE);
+            tableRepository.save(table);
+        }
+
+        reservationRepository.deleteById(id);
+    }
 }
