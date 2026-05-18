@@ -1,17 +1,20 @@
 package com.restaurant.reservation_system.reviewmanagement;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@Entity
-public class Review {
+@Service
+public class ReviewService {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final ReviewRepository reviewRepository;
 
-    private String customerName;
-    private String customerEmail;
+    @Autowired
+    public ReviewService(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
 
-    private int rating;
-    private String comment;
+    // Method to handle saving business logic for a review
+    public Review saveReview(Review review) {
+        return reviewRepository.save(review);
+    }
+}
