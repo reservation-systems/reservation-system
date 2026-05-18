@@ -1,6 +1,7 @@
 package com.restaurant.reservation_system.reviewmanagement;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Review {
@@ -11,4 +12,14 @@ public class Review {
 
     private String customerName;
     private String customerEmail;
+
+    private int rating;
+    private String comment;
+
+    private LocalDateTime reviewDate;
+
+    @PrePersist
+    public void onCreate() {
+        reviewDate = LocalDateTime.now();
+    }
 }
