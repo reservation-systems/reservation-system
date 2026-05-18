@@ -22,4 +22,24 @@ public class ReservationService {
     public List<Reservation> getReservationsByEmail(String email) {
         return reservationRepository.findByCustomerEmail(email);
     }
+    // Business Logic: Save a new reservation and force its initial status to PENDING
+    public Reservation createReservation(Reservation reservation) {
+        reservation.setStatus(ReservationStatus.PENDING);
+        return reservationRepository.save(reservation);
+    }
+
+    // Business Logic: Find an existing reservation, change its status, or throw an error if missing
+    public Reservation updateStatus(Long id, ReservationStatus status) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        reservation.setStatus(status);
+        return reservationRepository.save(reservation);
+    }
+
+    // Business Logic: Delete a record by its unique ID
+    public void deleteReservation(Long id) {
+        reservationRepository.deleteById(id);
+    }
+
 }
