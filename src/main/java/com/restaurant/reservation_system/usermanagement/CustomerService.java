@@ -19,4 +19,12 @@ public class CustomerService {
     public Customer findByEmail(String email) {
         return customerRepository.findByEmail(email).orElse(null);
     }
+
+    public Customer registerCustomer(Customer customer) {
+        if (customerRepository.existsByEmail(customer.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        return customerRepository.save(customer);
+    }
 }
