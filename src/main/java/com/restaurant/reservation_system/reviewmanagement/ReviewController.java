@@ -19,8 +19,19 @@ public class ReviewController {
         return reviewService.getAllReviews();
     }
 
+    @PostMapping
+    public Review addReview(@RequestBody Review review) {
+        return reviewService.addReview(review);
+    }
+
     @GetMapping("/customer")
     public List<Review> getReviewsByCustomerEmail(@RequestParam String email) {
         return reviewService.getReviewsByCustomerEmail(email);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
+        return "Review deleted successfully";
     }
 }
