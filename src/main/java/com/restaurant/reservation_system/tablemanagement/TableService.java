@@ -27,4 +27,29 @@ public class TableService {
     public RestaurantTable addTable(RestaurantTable table) {
         return tableRepository.save(table);
     }
+    // Business Logic: Find an existing table and update all its details safely
+    public RestaurantTable updateTable(Long id, RestaurantTable updatedTable) {
+        RestaurantTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+
+        table.setTableNumber(updatedTable.getTableNumber());
+        table.setCapacity(updatedTable.getCapacity());
+        table.setStatus(updatedTable.getStatus());
+
+        return tableRepository.save(table);
+    }
+
+    // Business Logic: Quickly toggle just the status (e.g., AVAILABLE to OCCUPIED)
+    public RestaurantTable updateStatus(Long id, TableStatus status) {
+        RestaurantTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+
+        table.setStatus(status);
+        return tableRepository.save(table);
+    }
+
+    // Business Logic: Permanently remove a table record by ID
+    public void deleteTable(Long id) {
+        tableRepository.deleteById(id);
+    }
 }
