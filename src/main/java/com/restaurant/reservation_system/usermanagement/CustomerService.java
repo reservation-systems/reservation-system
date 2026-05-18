@@ -1,3 +1,5 @@
+package com.restaurant.reservation_system.usermanagement;
+
 import com.restaurant.reservation_system.usermanagement.Customer;
 import org.springframework.stereotype.Service;
 
