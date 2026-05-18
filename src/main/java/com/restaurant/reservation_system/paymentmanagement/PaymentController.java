@@ -1,5 +1,6 @@
 package com.restaurant.reservation_system.paymentmanagement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -8,31 +9,30 @@ import java.util.List;
 @CrossOrigin("*")
 public class PaymentController {
 
-    private final PaymentService paymentService;
-
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping
-    public List<Payment> getAllPayments() {
+    public List<Payment> getAllPayments(@RequestParam(required = false) String status) {
+        if (status != null && !status.isEmpty()) {
+            return paymentService.getPaymentsByStatus(status);
+        }
         return paymentService.getAllPayments();
     }
 
-    @PostMapping
-    public Payment createPayment(@RequestBody Payment payment) {
-        return paymentService.createPayment(payment);
+    @GetMapping("/summary")
+    public PaymentSummary getSummary() {
+        return paymentService.getSummary();
+    }
+
+    @PostMapping("/process")
+    public Payment processPayment(@RequestBody PaymentRequest request) {
+        return paymentService.processPayment(request);
     }
 
     @PutMapping("/{id}/status")
-    public Payment updatePaymentStatus(@PathVariable Long id,
-                                       @RequestParam PaymentStatus status) {
+    public Payment updateStatus(@PathVariable Long id, @RequestParam String status) {
         return paymentService.updatePaymentStatus(id, status);
-    }
-
-    @GetMapping("/customer")
-    public List<Payment> getPaymentsByCustomerEmail(@RequestParam String email) {
-        return paymentService.getPaymentsByCustomerEmail(email);
     }
 
     @DeleteMapping("/{id}")
