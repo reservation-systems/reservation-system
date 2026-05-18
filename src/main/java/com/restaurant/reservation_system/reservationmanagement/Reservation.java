@@ -22,6 +22,9 @@ public class Reservation {
     private LocalTime reservationTime;
 
     private int numberOfGuests;
+    private Integer tableNumber;
+
+    private String specialRequest;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status = ReservationStatus.PENDING;
@@ -48,6 +51,22 @@ public class Reservation {
 
     public int getNumberOfGuests() { return numberOfGuests; }
     public void setNumberOfGuests(int numberOfGuests) { this.numberOfGuests = numberOfGuests; }
+
+    public Integer getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(Integer tableNumber) {
+        this.tableNumber = tableNumber;
+    }
+
+    public String getSpecialRequest() {
+        return specialRequest;
+    }
+
+    public void setSpecialRequest(String specialRequest) {
+        this.specialRequest = specialRequest;
+    }
 
     public ReservationStatus getStatus() { return status; }
     public void setStatus(ReservationStatus status) { this.status = status; }
