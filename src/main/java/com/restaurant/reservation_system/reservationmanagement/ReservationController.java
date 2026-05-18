@@ -26,4 +26,24 @@ public class ReservationController {
     public List<Reservation> getByEmail(@RequestParam String email) {
         return reservationService.getReservationsByEmail(email);
     }
+    // Create a new reservation
+    @PostMapping
+    public Reservation createReservation(@RequestBody Reservation reservation) {
+        return reservationService.createReservation(reservation);
+    }
+
+    // Update reservation status (e.g., PENDING to CONFIRMED)
+    @PutMapping("/{id}/status")
+    public Reservation updateStatus(@PathVariable Long id,
+                                    @RequestParam ReservationStatus status) {
+        return reservationService.updateStatus(id, status);
+    }
+
+    // Delete a reservation
+    @DeleteMapping("/{id}")
+    public String deleteReservation(@PathVariable Long id) {
+        reservationService.deleteReservation(id);
+        return "Reservation deleted successfully";
+    }
+
 }
