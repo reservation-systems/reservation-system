@@ -15,7 +15,14 @@ public class AuthController {
         this.authService = authService;
         this.customerService = customerService;
     }
+    @PostMapping("/register")
+    public Customer register(@RequestBody Customer customer) {
+        return customerService.registerCustomer(customer);
+    }
 
-
+    @PostMapping("/login")
+    public Customer login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest.getEmail(), loginRequest.getPassword());
+    }
 
 }
