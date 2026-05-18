@@ -52,6 +52,7 @@ public class TableController {
     public String deleteTable(@PathVariable Long id) {
         tableService.deleteTable(id);
         return "Table deleted successfully";
+
     }
 }
 
