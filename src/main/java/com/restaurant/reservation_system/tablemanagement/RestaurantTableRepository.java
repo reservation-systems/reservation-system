@@ -10,4 +10,5 @@ public interface RestaurantTableRepository extends JpaRepository<RestaurantTable
     List<RestaurantTable> findByStatus(TableStatus status);
 
     Optional<RestaurantTable> findByTableNumber(Integer tableNumber);
+
 }
