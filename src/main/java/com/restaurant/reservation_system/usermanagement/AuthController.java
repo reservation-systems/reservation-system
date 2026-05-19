@@ -1,16 +1,11 @@
 package com.restaurant.reservation_system.usermanagement;
 
- tablemanagement-and-researvationmanagement
-import org.springframework.web.bind.annotation.*;
-
-
 import com.restaurant.reservation_system.adminmanagement.Admin;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
- main
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin("*")
@@ -24,9 +19,6 @@ public class AuthController {
         this.authService = authService;
         this.customerService = customerService;
     }
-
- tablemanagement-and-researvationmanagement
-
 
     @PostMapping("/register")
     public Customer register(@RequestBody Customer customer) {
@@ -70,5 +62,4 @@ public class AuthController {
 
         return response;
     }
- main
 }
