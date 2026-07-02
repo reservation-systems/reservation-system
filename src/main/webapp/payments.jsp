@@ -200,10 +200,7 @@
                         Print
                     </button>
 
-                    <button class="btn btn-primary" onclick="openPaymentModal()">
-                        <i class="fas fa-plus"></i>
-                        New Payment
-                    </button>
+
                 </div>
             </div>
 

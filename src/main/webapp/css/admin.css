@@ -1374,3 +1374,20 @@ textarea:focus {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+.stat-card {
+    min-width: 0;
+}
+
+.stats-grid {
+    min-width: 0;
+}
+
+.admin-main,
+.admin-content {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.data-table-container {
+    min-width: 0;
+}

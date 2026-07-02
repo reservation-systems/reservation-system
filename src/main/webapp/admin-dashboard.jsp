@@ -108,7 +108,7 @@
 
         .dashboard-layout{
             display:grid;
-            grid-template-columns:1.4fr 1fr;
+            grid-template-columns:1fr;
             gap:1.5rem;
             margin-bottom:1.5rem;
         }
@@ -461,8 +461,7 @@
                 <i class="fas fa-calendar-check"></i>
                 <span>Reservations</span>
 
-                <span class="badge"
-                      id="reservationBadge">0</span>
+
             </a>
 
             <a href="customers.jsp"
@@ -519,8 +518,7 @@
                 <i class="fas fa-star"></i>
                 <span>Reviews</span>
 
-                <span class="badge"
-                      id="reviewBadge">0</span>
+
             </a>
 
             <a href="#"
@@ -708,74 +706,7 @@
 
                 </div>
 
-                <div class="dashboard-card">
 
-                    <div class="card-header">
-
-                        <div class="card-header-left">
-                            <div class="icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-
-                            <div>
-                                <h2>Quick Actions</h2>
-                                <p>Open management pages fast</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="quick-links">
-
-                            <a href="reservations-admin.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-calendar-check"></i>
-                                Reservations
-                            </a>
-
-                            <a href="tables.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-chair"></i>
-                                Tables
-                            </a>
-
-                            <a href="menu-management.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-utensils"></i>
-                                Menu
-                            </a>
-
-                            <a href="staff.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-user-tie"></i>
-                                Staff
-                            </a>
-
-                            <a href="offers-management.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-tags"></i>
-                                Offers
-                            </a>
-
-                            <a href="payments.jsp"
-                               class="quick-link">
-
-                                <i class="fas fa-credit-card"></i>
-                                Payments
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </div>
 
             </div>
 
