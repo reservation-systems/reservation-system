@@ -687,7 +687,7 @@
         loadTables();
     });
 
-    /* ══ CHECK LOGIN — SHOW ALERT + REDIRECT TO LOGIN ══ */
+
     function requireLogin() {
         var customer = JSON.parse(localStorage.getItem("customer") || "null");
         if (!customer) {
