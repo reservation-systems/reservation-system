@@ -5,7 +5,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
-@CrossOrigin("*")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -18,6 +17,12 @@ public class ReservationController {
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
+
+    @GetMapping("/{id}")
+    public Reservation getReservation(@PathVariable Long id) { return reservationService.getReservation(id); }
+
+    @PutMapping("/{id}")
+    public Reservation editReservation(@PathVariable Long id, @RequestBody Reservation input) { return reservationService.updateReservation(id,input); }
 
     @PostMapping
     public Reservation createReservation(@RequestBody Reservation reservation) {

@@ -235,6 +235,7 @@
             .card-body { padding: 1.5rem; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -303,7 +304,7 @@
 </div>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
 
     async function handleLogin(event) {
         event.preventDefault();
@@ -311,7 +312,7 @@
         const message  = document.getElementById("loginMessage");
         const btn      = document.getElementById("loginBtn");
         const email    = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+        const password = document.getElementById("password").value;
 
         if (!email || !password) {
             showMsg("Please enter email and password.", "error");

@@ -1,65 +1,40 @@
 package com.restaurant.reservation_system.usermanagement;
-
 import com.restaurant.reservation_system.adminmanagement.Admin;
+import jakarta.servlet.http.*;
+import java.util.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
 public class AuthController {
-
-    private final AuthService authService;
-    private final CustomerService customerService;
-
-    public AuthController(AuthService authService,
-                          CustomerService customerService) {
-        this.authService = authService;
-        this.customerService = customerService;
+    private final AuthService auth;
+    private final CustomerService customers;
+    private final SecurityContextRepository contexts;
+    public AuthController(AuthService auth, CustomerService customers, SecurityContextRepository contexts) { this.auth=auth; this.customers=customers; this.contexts=contexts; }
+    @GetMapping("/csrf") public Map<String,String> csrf(CsrfToken token) { return Map.of("token",token.getToken(),"headerName",token.getHeaderName()); }
+    @PostMapping("/register") public Customer register(@RequestBody Customer customer) { return customers.registerCustomer(customer); }
+    @PostMapping("/login") public Map<String,Object> login(@RequestBody LoginRequest input, HttpServletRequest request, HttpServletResponse response) {
+        return signIn(auth.login(input.getEmail(), input.getPassword()),request,response);
     }
-
-    @PostMapping("/register")
-    public Customer register(@RequestBody Customer customer) {
-        return customerService.registerCustomer(customer);
+    public Map<String,Object> signIn(Object user, HttpServletRequest request, HttpServletResponse response) {
+        boolean admin = user instanceof Admin;
+        String email = admin ? ((Admin)user).getEmail() : ((Customer)user).getEmail();
+        request.getSession(); request.changeSessionId();
+        var context=SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(email,null,List.of(new SimpleGrantedAuthority(admin?"ROLE_ADMIN":"ROLE_CUSTOMER"))));
+        SecurityContextHolder.setContext(context); contexts.saveContext(context,request,response);
+        new org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository().saveToken(null,request,response);
+        return Map.of("status","success","role",admin?"ADMIN":"CUSTOMER","redirect",admin?"admin-dashboard.jsp":"home.jsp",admin?"admin":"customer",user);
     }
-
-    @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody LoginRequest loginRequest) {
-
-        Object user = authService.login(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-        );
-
-        Map<String, Object> response = new HashMap<>();
-
-        if (user instanceof Admin) {
-
-            Admin admin = (Admin) user;
-
-            response.put("status", "success");
-            response.put("role", "ADMIN");
-            response.put("redirect", "admin-dashboard.jsp");
-            response.put("admin", admin);
-
-        } else if (user instanceof Customer) {
-
-            Customer customer = (Customer) user;
-
-            response.put("status", "success");
-            response.put("role", "CUSTOMER");
-            response.put("redirect", "home.jsp");
-            response.put("customer", customer);
-
-        } else {
-
-            response.put("status", "failed");
-            response.put("message", "Invalid email or password");
-
-        }
-
-        return response;
+    @GetMapping("/me") public Map<String,Object> me() {
+        var a=SecurityContextHolder.getContext().getAuthentication();
+        return Map.of("email",a.getName(),"role",a.getAuthorities().stream().anyMatch(r->r.getAuthority().equals("ROLE_ADMIN"))?"ADMIN":"CUSTOMER");
+    }
+    @PostMapping("/logout") public Map<String,String> logout(HttpServletRequest request) {
+        var session=request.getSession(false); if(session!=null) session.invalidate(); SecurityContextHolder.clearContext(); return Map.of("status","success");
     }
 }

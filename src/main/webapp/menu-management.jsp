@@ -376,6 +376,7 @@
             border: 2px solid #ff6b00;
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -672,7 +673,7 @@
 <script src="./js/admin.js"></script>
 
 <script>
-    var API_BASE = "http://localhost:8080/api";
+    var API_BASE = "<%= request.getContextPath() %>/api";
     var menuItems = [];
     var selectedCategory = "ALL";
 

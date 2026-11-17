@@ -5,7 +5,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
-@CrossOrigin("*")
 public class ReviewController {
 
     private final ReviewService reviewService;

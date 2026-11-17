@@ -397,6 +397,7 @@
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 <body>
 
@@ -489,7 +490,7 @@
 </footer>
 
 <script>
-    var API_BASE  = "http://localhost:8080/api";
+    var API_BASE  = "<%= request.getContextPath() %>/api";
     var allPromos = [];
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -611,7 +612,7 @@
 
     function esc(t) { return String(t || "").replace(/'/g, "\\'"); }
 
-    function logout() {
+    async function logout() { await window.endSession();
         localStorage.removeItem("customer");
         window.location.href = "home.jsp";
     }

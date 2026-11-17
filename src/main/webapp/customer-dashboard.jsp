@@ -441,6 +441,7 @@
             .dashboard-hero-inner { flex-direction: column; align-items: flex-start; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -626,7 +627,7 @@
 </footer>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
 
     document.addEventListener("DOMContentLoaded", loadCustomerDashboard);
 
@@ -726,7 +727,7 @@
         return "";
     }
 
-    function logout() {
+    async function logout() { await window.endSession();
         localStorage.removeItem("customer");
         window.location.href = "home.jsp";
     }

@@ -70,6 +70,7 @@
             box-shadow:0 8px 32px rgba(0,0,0,0.18);
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -396,7 +397,7 @@
 <script src="./js/admin.js"></script>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
 
     let allPayments = [];
 

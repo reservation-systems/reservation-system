@@ -3,6 +3,7 @@ package com.restaurant.reservation_system.tablemanagement;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@org.springframework.transaction.annotation.Transactional
 @Service
 public class TableService {
 
@@ -21,6 +22,9 @@ public class TableService {
     }
 
     public RestaurantTable addTable(RestaurantTable table) {
+        table.setId(null);
+        if(table.getTableNumber()<1 || table.getCapacity()<1) throw new IllegalArgumentException("Table number and capacity must be positive");
+        if(table.getStatus()==TableStatus.RESERVED) throw new IllegalArgumentException("Reservations are managed by date and time; use UNAVAILABLE to block a table");
         return tableRepository.save(table);
     }
 
@@ -28,6 +32,7 @@ public class TableService {
         RestaurantTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Table not found"));
 
+        if(table.getTableNumber()!=updatedTable.getTableNumber()) throw new IllegalArgumentException("Table numbers cannot be changed after creation");
         table.setTableNumber(updatedTable.getTableNumber());
         table.setCapacity(updatedTable.getCapacity());
         table.setStatus(updatedTable.getStatus());

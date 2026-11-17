@@ -87,6 +87,7 @@
             }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>

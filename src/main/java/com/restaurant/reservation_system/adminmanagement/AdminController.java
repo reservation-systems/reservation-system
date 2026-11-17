@@ -1,156 +1,23 @@
 package com.restaurant.reservation_system.adminmanagement;
-
+import com.restaurant.reservation_system.usermanagement.*;
+import jakarta.servlet.http.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import java.util.*;
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin("*")
 public class AdminController {
-
-    private final AdminRepository adminRepository;
-
-    public AdminController(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
-    }
-
-
-
-    @GetMapping("/all")
-    public List<Admin> getAllAdmins() {
-        return adminRepository.findAll();
-    }
-
-
-
-    @GetMapping("/{id}")
-    public Admin getAdmin(@PathVariable Long id) {
-
-        return adminRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Admin not found"));
-    }
-
-
-    @PostMapping("/add")
-    public Map<String, Object> addAdmin(@RequestBody Admin admin) {
-
-        Map<String, Object> response = new HashMap<>();
-
-
-        if (adminRepository.existsByEmail(admin.getEmail())) {
-
-            response.put("status", "failed");
-            response.put("message", "Email already exists");
-
-            return response;
-        }
-
-        Admin savedAdmin = adminRepository.save(admin);
-
-        response.put("status", "success");
-        response.put("message", "Admin added successfully");
-        response.put("admin", savedAdmin);
-
-        return response;
-    }
-
-
-
-    @PutMapping("/update/{id}")
-    public Map<String, Object> updateAdmin(
-            @PathVariable Long id,
-            @RequestBody Admin updatedAdmin) {
-
-        Admin admin = adminRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Admin not found"));
-
-        admin.setName(updatedAdmin.getName());
-
-        admin.setEmail(updatedAdmin.getEmail());
-
-
-        if (updatedAdmin.getPassword() != null
-                && !updatedAdmin.getPassword().isEmpty()) {
-
-            admin.setPassword(updatedAdmin.getPassword());
-        }
-
-
-        if (updatedAdmin.getRole() != null
-                && !updatedAdmin.getRole().isEmpty()) {
-
-            admin.setRole(updatedAdmin.getRole());
-        }
-
-        Admin savedAdmin = adminRepository.save(admin);
-
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", "success");
-        response.put("message", "Admin updated successfully");
-        response.put("admin", savedAdmin);
-
-        return response;
-    }
-
-
-
-    @DeleteMapping("/delete/{id}")
-    public Map<String, Object> deleteAdmin(
-            @PathVariable Long id) {
-
-        adminRepository.deleteById(id);
-
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", "success");
-        response.put("message", "Admin deleted successfully");
-
-        return response;
-    }
-
-
-
-
-    @PostMapping("/login")
-    public Map<String, Object> login(
-            @RequestBody Admin loginAdmin) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        Optional<Admin> optionalAdmin =
-                adminRepository.findByEmail(loginAdmin.getEmail());
-
-
-        if (optionalAdmin.isEmpty()) {
-
-            response.put("status", "failed");
-            response.put("message", "Invalid email");
-
-            return response;
-        }
-
-        Admin admin = optionalAdmin.get();
-
-
-        if (!admin.getPassword().equals(loginAdmin.getPassword())) {
-
-            response.put("status", "failed");
-            response.put("message", "Invalid password");
-
-            return response;
-        }
-
-        response.put("status", "success");
-        response.put("message", "Login successful");
-        response.put("admin", admin);
-
-        return response;
+    private final AdminService admins; private final AuthService auth; private final AuthController sessions;
+    public AdminController(AdminService admins,AuthService auth,AuthController sessions){this.admins=admins;this.auth=auth;this.sessions=sessions;}
+    @GetMapping("/all") public List<Admin> all(){return admins.getAllAdmins();}
+    @GetMapping("/{id}") public Admin get(@PathVariable Long id){return admins.getAdminById(id);}
+    @PostMapping("/add") public Map<String,Object> add(@RequestBody Admin input){return Map.of("status","success","admin",admins.addAdmin(input));}
+    @PutMapping("/update/{id}") public Map<String,Object> update(@PathVariable Long id,@RequestBody Admin input){return Map.of("status","success","admin",admins.updateAdmin(id,input));}
+    @DeleteMapping("/delete/{id}") public Map<String,String> delete(@PathVariable Long id){admins.deleteAdmin(id);return Map.of("status","success");}
+    @PostMapping("/login") public Map<String,Object> login(@RequestBody LoginRequest input,HttpServletRequest req,HttpServletResponse res){
+        Object user=auth.login(input.getEmail(),input.getPassword());
+        if(!(user instanceof Admin))throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Invalid email or password");
+        return sessions.signIn(user,req,res);
     }
 }

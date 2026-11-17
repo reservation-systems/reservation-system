@@ -420,6 +420,7 @@
 
     </style>
 
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -889,7 +890,7 @@
 <script>
 
     const API_BASE =
-        "http://localhost:8080/api";
+        "<%= request.getContextPath() %>/api";
 
     let admin =
         JSON.parse(localStorage.getItem("admin"));
@@ -1300,7 +1301,7 @@
         }
     }
 
-    function logout(){
+    async function logout() { await window.endSession();
 
         localStorage.removeItem("admin");
 

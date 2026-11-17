@@ -5,7 +5,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/staff")
-@CrossOrigin("*")
 public class StaffController {
     private final StaffService staffService;
 

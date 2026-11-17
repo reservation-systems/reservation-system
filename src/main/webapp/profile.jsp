@@ -290,6 +290,7 @@
         }
     </style>
 
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -543,7 +544,7 @@
 <script>
 
     const API_BASE =
-        "http://localhost:8080/api/customers";
+        "<%= request.getContextPath() %>/api/customers";
 
     let currentUser = null;
 
@@ -649,7 +650,7 @@
 
             password:
                 document.getElementById("password").value
-                || currentUser.password
+                || ""
         };
 
         try{
@@ -696,7 +697,7 @@
         }
     }
 
-    function logout(){
+    async function logout() { await window.endSession();
 
         localStorage.removeItem("customer");
 

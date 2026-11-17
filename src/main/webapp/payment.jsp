@@ -368,6 +368,7 @@
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -562,7 +563,7 @@
 </footer>
 
 <script>
-    var API_BASE = "http://localhost:8080/api";
+    var API_BASE = "<%= request.getContextPath() %>/api";
     var pendingPayment  = null;
     var discountPercent = 0;
     var discountAmt     = 0;
@@ -694,28 +695,19 @@
             body: JSON.stringify({
                 customerName:  pendingPayment.customerName,
                 customerEmail: pendingPayment.customerEmail,
-                amount:        afterDiscount,
+                amount:        (pendingPayment.fullMenuTotal || 0) * 0.30,
                 paymentMethod: method,
                 cardNumber:    cardNum,
                 offerCode:     offerCode
             })
         })
             .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
-            .then(function(paymentData) {
-                var resId = pendingPayment.reservationId;
-                if (resId) {
-                    return fetch(API_BASE + "/reservations/" + resId + "/status?status=CONFIRMED", { method: "PUT" })
-                        .then(function() { return paymentData; })
-                        .catch(function() { return paymentData; });
-                }
-                return paymentData;
-            })
             .then(function() {
                 sessionStorage.removeItem("pendingPayment");
                 document.getElementById("successMsg").textContent =
                     "Deposit of Rs. " + finalDeposit.toFixed(2) +
                     " paid for Reservation #" + (pendingPayment.reservationId || "-") +
-                    ". Your table is confirmed!";
+                    ". Payment recorded; your reservation is awaiting approval.";
                 document.getElementById("successOverlay").classList.add("show");
             })
             .catch(function() {
@@ -725,7 +717,7 @@
             });
     }
 
-    function logout() { localStorage.removeItem("customer"); window.location.href = "home.jsp"; }
+    async function logout() { await window.endSession(); localStorage.removeItem("customer"); window.location.href = "home.jsp"; }
 </script>
 
 </body>

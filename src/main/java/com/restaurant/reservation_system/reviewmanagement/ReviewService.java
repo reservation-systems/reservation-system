@@ -7,6 +7,7 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    @org.springframework.beans.factory.annotation.Autowired private com.restaurant.reservation_system.config.Access access;
 
     public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
@@ -17,6 +18,8 @@ public class ReviewService {
     }
 
     public Review addReview(Review review) {
+        review.setId(null);
+        if(!access.isAdmin()) review.setCustomerEmail(access.email());
         if (review.getRating() < 1 || review.getRating() > 5) {
             throw new RuntimeException("Rating must be between 1 and 5");
         }
@@ -25,6 +28,7 @@ public class ReviewService {
     }
 
     public List<Review> getReviewsByCustomerEmail(String email) {
+        access.owner(email);
         return reviewRepository.findByCustomerEmail(email);
     }
 

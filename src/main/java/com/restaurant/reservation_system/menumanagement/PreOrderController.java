@@ -5,7 +5,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/preorders")
-@CrossOrigin("*")
 
 public class PreOrderController {
     private final PreOrderService preOrderService;

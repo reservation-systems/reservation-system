@@ -475,6 +475,7 @@
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -673,7 +674,8 @@
 </footer>
 
 <script>
-    var API_BASE = "http://localhost:8080/api";
+    var API_BASE = "<%= request.getContextPath() %>/api";
+    var editId = new URLSearchParams(window.location.search).get("editId");
     var selectedTableNumber   = null;
     var selectedTableCapacity = null;
     var allMenuItems          = [];
@@ -684,7 +686,9 @@
     /* ══ ON LOAD — NO REDIRECT, JUST LOAD ══ */
     document.addEventListener("DOMContentLoaded", function() {
         updateNavbar();
-        loadTables();
+        fillCustomerData();
+        if(editId) loadReservationForEdit(); else loadTables();
+        ["reservationDate","reservationTime"].forEach(function(id) { document.getElementById(id).addEventListener("change",loadTables); });
     });
 
 
@@ -714,7 +718,7 @@
     function fillCustomerData() {
         var customer = JSON.parse(localStorage.getItem("customer") || "null");
         if (customer) {
-            document.getElementById("customerName").value  = customer.fullName || "";
+            document.getElementById("customerName").value  = customer.name || "";
             document.getElementById("customerEmail").value = customer.email    || "";
             document.getElementById("customerPhone").value = customer.phone    || "";
         }
@@ -725,13 +729,18 @@
         var container = document.getElementById("tablesContainer");
         container.innerHTML = '<div class="panel-loading"><i class="fas fa-spinner"></i>Loading tables...</div>';
         try {
-            var res = await fetch(API_BASE + "/tables");
+            var date = document.getElementById("reservationDate").value;
+            var time = document.getElementById("reservationTime").value;
+            var url = API_BASE + "/tables/available";
+            if(date && time) url += "?date=" + encodeURIComponent(date) + "&time=" + encodeURIComponent(time) + (editId ? "&excludeId=" + encodeURIComponent(editId) : "");
+            var res = await fetch(url);
             if (!res.ok) { throw new Error("fail"); }
             var tables = await res.json();
             if (!tables || tables.length === 0) {
                 container.innerHTML = '<div class="panel-empty"><i class="fas fa-chair"></i>No tables found.</div>';
                 return;
             }
+            if(selectedTableNumber && !tables.some(t => t.tableNumber === Number(selectedTableNumber))) { selectedTableNumber=null; selectedTableCapacity=null; document.getElementById("tableNumber").value=""; document.getElementById("tableHint").style.display="none"; }
             renderTables(tables);
         } catch (e) {
             container.innerHTML =
@@ -775,8 +784,8 @@
         applyTableHighlight(tableNum);
         document.getElementById("tableHintText").textContent = "Table " + tableNum + " selected (" + capacity + " seats)";
         document.getElementById("tableHint").style.display = "flex";
-        if (!wasAlreadySelected) { unlockMenuPanel(); }
-        fillCustomerData();
+        if (!wasAlreadySelected && !editId) { unlockMenuPanel(); }
+        if(!editId) fillCustomerData();
     }
 
     function applyTableHighlight(tableNum) {
@@ -996,14 +1005,15 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
         try {
-            var res = await fetch(API_BASE + "/reservations", {
-                method: "POST",
+            var res = await fetch(API_BASE + "/reservations" + (editId ? "/" + encodeURIComponent(editId) : ""), {
+                method: editId ? "PUT" : "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reservationData)
             });
-            if (!res.ok) { throw new Error("fail"); }
+            if (!res.ok) { var error=await res.json(); throw new Error(error.message || "Reservation could not be saved"); }
             var created = await res.json();
 
+            if(editId) { window.location.href="my-reservations.jsp"; return; }
             if (orderedItems.length > 0) {
                 var total = calcMenuTotal();
                 sessionStorage.setItem("pendingPayment", JSON.stringify({
@@ -1016,16 +1026,29 @@
                 }));
                 window.location.href = "payment.jsp";
             } else {
-                alert("Reservation confirmed! We look forward to seeing you.");
+                alert("Reservation submitted and awaiting approval.");
                 resetForm();
             }
         } catch (e) {
-            alert("Failed to create reservation. Please try again.");
+            alert(e.message || "Failed to save reservation. Please try again.");
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Reservation';
         }
     }
 
+    async function loadReservationForEdit() {
+        try {
+            var res=await fetch(API_BASE+"/reservations/"+encodeURIComponent(editId));
+            if(!res.ok) throw new Error("Cannot load this reservation");
+            var r=await res.json();
+            ["customerName","customerEmail","customerPhone","reservationDate","reservationTime","numberOfGuests","specialRequest"].forEach(function(id){document.getElementById(id).value=r[id] || "";});
+            selectedTableNumber=r.tableNumber;
+            document.getElementById("tableNumber").value=r.tableNumber;
+            document.getElementById("submitBtn").textContent="Save reservation";
+            document.getElementById("menuPanelBody").textContent="Edit your table, date, time and guest details here.";
+            await loadTables();
+        } catch(e) { alert(e.message); window.location.href="my-reservations.jsp"; }
+    }
     function resetForm() {
         document.getElementById("reservationForm").reset();
         selectedTableNumber = null; selectedTableCapacity = null;
@@ -1045,7 +1068,7 @@
     }
 
     function escQ(str) { return String(str).replace(/'/g, "\\'"); }
-    function logout() { localStorage.removeItem("customer"); window.location.href = "home.jsp"; }
+    async function logout() { await window.endSession(); localStorage.removeItem("customer"); window.location.href = "home.jsp"; }
 </script>
 </body>
 </html>

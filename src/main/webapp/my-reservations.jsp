@@ -168,6 +168,7 @@
             }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -270,7 +271,7 @@
 <script src="./js/main.js"></script>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
 
     let allReservations = [];
 
@@ -504,7 +505,7 @@
         return new Date(date).toLocaleDateString();
     }
 
-    function logout() {
+    async function logout() { await window.endSession();
         localStorage.removeItem("customer");
         window.location.href = "home.jsp";
     }

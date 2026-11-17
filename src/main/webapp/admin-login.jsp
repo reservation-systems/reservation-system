@@ -20,6 +20,7 @@
 
     <link rel="stylesheet"
           href="./css/responsive.css">
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -96,7 +97,7 @@
 </div>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
 
     async function handleAdminLogin(event) {
         event.preventDefault();
@@ -123,7 +124,8 @@
                 return;
             }
 
-            const admin = await response.json();
+            const data = await response.json();
+            const admin = data.admin;
 
             localStorage.setItem("admin", JSON.stringify(admin));
 

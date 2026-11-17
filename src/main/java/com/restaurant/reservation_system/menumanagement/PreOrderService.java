@@ -25,6 +25,8 @@ public class PreOrderService {
             throw new RuntimeException("Menu item is not available");
         }
 
+        preOrder.setId(null);
+        if(preOrder.getQuantity()<1) throw new IllegalArgumentException("Quantity must be positive");
         preOrder.setMenuItem(menuItem);
         preOrder.setItemName(menuItem.getName());
         preOrder.setTotalPrice(menuItem.getPrice() * preOrder.getQuantity());

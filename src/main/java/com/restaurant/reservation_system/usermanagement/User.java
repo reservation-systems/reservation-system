@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 public class User {
 
     private String name;
+    @Column(unique = true, nullable = false)
     private String email;
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String phone;
 

@@ -5,10 +5,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tables")
-@CrossOrigin("*")
 public class TableController {
 
     private final TableService tableService;
+    @org.springframework.beans.factory.annotation.Autowired private com.restaurant.reservation_system.reservationmanagement.ReservationService reservations;
 
     public TableController(TableService tableService) {
         this.tableService = tableService;
@@ -20,8 +20,8 @@ public class TableController {
     }
 
     @GetMapping("/available")
-    public List<RestaurantTable> getAvailableTables() {
-        return tableService.getAvailableTables();
+    public List<RestaurantTable> getAvailableTables(@RequestParam(required=false) java.time.LocalDate date, @RequestParam(required=false) java.time.LocalTime time, @RequestParam(required=false) Long excludeId) {
+        return reservations.available(date,time,excludeId);
     }
 
     @PostMapping

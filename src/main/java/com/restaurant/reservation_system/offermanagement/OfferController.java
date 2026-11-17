@@ -9,7 +9,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/offers")
-@CrossOrigin("*")
 public class OfferController {
 
     private final OfferService offerService;

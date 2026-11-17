@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/offer-codes")
-@CrossOrigin("*")
 public class OfferCodeController {
 
     @Autowired

@@ -295,6 +295,7 @@
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -380,7 +381,7 @@
 
 <script src="./js/main.js"></script>
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
     let allMenuItems = [];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -462,7 +463,7 @@
 
     function bookTable() { window.location.href = "reservation.jsp"; }
 
-    function logout() {
+    async function logout() { await window.endSession();
         localStorage.removeItem("customer");
         window.location.href = "home.jsp";
     }

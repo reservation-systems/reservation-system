@@ -303,6 +303,7 @@
             .summary-card { justify-content: center; text-align: center; }
         }
     </style>
+<script src="<%= request.getContextPath() %>/js/session.js"></script>
 </head>
 
 <body>
@@ -432,7 +433,7 @@
 </footer>
 
 <script>
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "<%= request.getContextPath() %>/api";
     let allReviews = [];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -562,7 +563,7 @@
         return new Date(date).toLocaleDateString();
     }
 
-    function logout() {
+    async function logout() { await window.endSession();
         localStorage.removeItem("customer");
         window.location.href = "home.jsp";
     }

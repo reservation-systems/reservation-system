@@ -9,6 +9,7 @@ import java.util.Optional;
 public class AdminService {
 
     private final AdminRepository adminRepository;
+    @org.springframework.beans.factory.annotation.Autowired private org.springframework.security.crypto.password.PasswordEncoder passwords;
 
     public AdminService(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
@@ -28,6 +29,9 @@ public class AdminService {
 
     public Admin addAdmin(Admin admin) {
 
+        admin.setEmail(com.restaurant.reservation_system.config.Passwords.email(admin.getEmail()));
+        com.restaurant.reservation_system.config.Passwords.validate(admin.getPassword());
+        admin.setPassword(passwords.encode(admin.getPassword()));
         if (adminRepository.existsByEmail(admin.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
@@ -45,11 +49,12 @@ public class AdminService {
         Admin admin = getAdminById(id);
 
         admin.setName(updatedAdmin.getName());
-        admin.setEmail(updatedAdmin.getEmail());
+        admin.setEmail(com.restaurant.reservation_system.config.Passwords.email(updatedAdmin.getEmail()));
 
         if (updatedAdmin.getPassword() != null &&
                 !updatedAdmin.getPassword().isEmpty()) {
-            admin.setPassword(updatedAdmin.getPassword());
+            com.restaurant.reservation_system.config.Passwords.validate(updatedAdmin.getPassword());
+            admin.setPassword(passwords.encode(updatedAdmin.getPassword()));
         }
 
         if (updatedAdmin.getRole() != null &&
@@ -76,7 +81,7 @@ public class AdminService {
 
         Admin admin = optionalAdmin.get();
 
-        if (!admin.getPassword().equals(password)) {
+        if (!passwords.matches(password,admin.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
@@ -88,7 +93,8 @@ public class AdminService {
 
         Admin admin = getAdminById(id);
 
-        admin.setPassword(newPassword);
+        com.restaurant.reservation_system.config.Passwords.validate(newPassword);
+        admin.setPassword(passwords.encode(newPassword));
 
         return adminRepository.save(admin);
     }

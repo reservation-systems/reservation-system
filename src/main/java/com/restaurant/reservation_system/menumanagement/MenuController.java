@@ -8,7 +8,6 @@ import java.util.List;
 converts the returned data into JSON)*/
 @RestController
 @RequestMapping("/api/menu")
-@CrossOrigin("*")
 
 public class MenuController {
     private final MenuService menuService;
